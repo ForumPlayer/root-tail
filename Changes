@@ -3,7 +3,7 @@
         - sped up redraws considerably (depending on xserver).
         - i18n: locale settings for multibyte characters are respected.
         - proportional fonts are supported now.
-	- supports options as long options now.
+	- supports options as --long options now.
 	- call redraw() before entering the main loop to ensure that
           at least something is displayed on the root window
           immediately
@@ -12,8 +12,8 @@
 	    * -partial: to display lines whether they are terminated or not
 	    * -update: to attempt to complete old partial lines 'in-place'
 	    * -cont: to specify a string to prefix 'broken' partial lines with
-	- set default interval back to 3 seconds, as mentioned in
-	  '-help' text and man page.
+            * -outline: black outline (relatively slow).
+	- comment default interval of 2.4 seconds.
 	- set default 'reload' value to 0 to prevent reloads.
 	- updated man page
 	- strict-aliasing fix suggested by mmj.
