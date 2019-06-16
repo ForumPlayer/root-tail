@@ -1,7 +1,7 @@
 
-LOCAL_LIBRARIES = $(XLIB)
+LOCAL_LIBRARIES = $(XLIB) $(XFIXESLIB)
 
-SRCS = root-tail.c 
+SRCS = root-tail.c
 
 OBJS = $(SRCS:.c=.o)
 

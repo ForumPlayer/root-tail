@@ -3,7 +3,6 @@
 #define DEF_COLOR       "white"
 #define DEF_CONT_COLOR  "grey"
 
-
 //default font.. -font at runtime should work
 #define USE_FONT        "*"
 
@@ -13,5 +12,5 @@
 #define LOC_X           30
 #define LOC_Y           30
 
-#define VERSION "1.2"
+#define VERSION "1.3"
 

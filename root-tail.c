@@ -41,6 +41,8 @@
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
+#include <X11/extensions/shape.h>
+#include <X11/extensions/Xfixes.h>
 
 #if HAS_REGEX
 #include <regex.h>
@@ -107,34 +109,35 @@ struct displaymatrix
 };
 
 /* global variables */
-struct line_node *linelist = NULL, *linelist_tail = NULL;
-struct displaymatrix *display;
-int continuation_width = -1;
-int continuation_color;
-int continuation_length;
+static struct line_node *linelist = NULL, *linelist_tail = NULL;
+static struct displaymatrix *display;
+static int continuation_width = -1;
+static int continuation_color;
+static int continuation_length;
 
 /* HACK - ideally listlen will start at however many '~'s will fit on
  * the screen */
-int width = STD_WIDTH, height = STD_HEIGHT, listlen = 50;
-int win_x = LOC_X, win_y = LOC_Y;
-int effect_x_space, effect_y_space; /* how much space does shading / outlining take up */
-int effect_x_offset, effect_y_offset; /* and how does it offset the usable space */
-int do_reopen;
-struct timeval interval = { 2, 400000 };
+static unsigned int width = STD_WIDTH, height = STD_HEIGHT;
+static int listlen = 50;
+static int win_x = LOC_X, win_y = LOC_Y;
+static int effect_x_space, effect_y_space; /* how much space does shading / outlining take up */
+static int effect_x_offset, effect_y_offset; /* and how does it offset the usable space */
+static int do_reopen;
+static struct timeval interval = { 2, 400000 };
 
 /* command line options */
-int opt_noinitial, opt_shade, opt_frame, opt_reverse, opt_nofilename,
+static int opt_noinitial, opt_shade, opt_frame, opt_reverse, opt_nofilename,
   opt_outline, opt_noflicker, opt_whole, opt_update, opt_wordwrap,
-  opt_justify, geom_mask, opt_minspace, reload;
-const char *command = NULL,
+  opt_justify, geom_mask, opt_minspace, opt_windowed, reload;
+static const char *command = NULL,
   *fontname = USE_FONT, *dispname = NULL, *def_color = DEF_COLOR,
   *continuation = "|| ", *cont_color = DEF_CONT_COLOR;
 
 struct logfile_entry *loglist = NULL, *loglist_tail = NULL;
 
-Display *disp;
-Window root;
-GC WinGC;
+static Display *disp;
+static Window root;
+static GC WinGC;
 
 #if HAS_REGEX
 struct re_list
@@ -143,43 +146,42 @@ struct re_list
   const char *to;
   struct re_list *next;
 };
-struct re_list *re_head, *re_tail;
-char *transform_to = NULL;
-regex_t *transformre;
+static struct re_list *re_head, *re_tail;
+static char *transform_to = NULL;
+static regex_t *transformre;
 #endif
 
 
 /* prototypes */
-void list_files (int);
-void force_reopen (int);
-void force_refresh (int);
-void blank_window (int);
+static void list_files (int);
+static void force_reopen (int);
+static void force_refresh (int);
+static void blank_window (int);
 #ifdef USE_TOON_GET_ROOT_WINDOW
-Window ToonGetRootWindow(Display *, int, Window *);
+static Window ToonGetRootWindow(Display *, int, Window *);
 #endif /* USE_TOON_GET_ROOT_WINDOW */
 
-void InitWindow (void);
-unsigned long GetColor (const char *);
-void redraw (int);
-void refresh (int, int, int, int);
+static void InitWindow (void);
+static unsigned long GetColor (const char *);
+static void redraw (int);
+static void refresh (int, int, int, int);
 
-void transform_line (char *s);
-int lineinput (struct logfile_entry *);
-void reopen (void);
-void check_open_files (void);
-FILE *openlog (struct logfile_entry *);
+static int lineinput (struct logfile_entry *);
+static void reopen (void);
+static void check_open_files (void);
+static FILE *openlog (struct logfile_entry *);
 static void main_loop (void);
 
-void display_version (void);
-void display_help (char *);
-void install_signal (int, void (*)(int));
-void *xstrdup (const char *);
-void *xmalloc (size_t);
-void *xrealloc (void *, size_t);
-int daemonize (void);
+static void display_version (void);
+static void display_help (char *);
+static void install_signal (int, void (*)(int));
+static void *xstrdup (const char *);
+static void *xmalloc (size_t);
+static void *xrealloc (void *, size_t);
+static int daemonize (void);
 
 /* signal handlers */
-void
+static void
 list_files (int dummy)
 {
   struct logfile_entry *e;
@@ -189,19 +191,19 @@ list_files (int dummy)
     fprintf (stderr, "\t%s (%s)\n", e->fname, e->desc);
 }
 
-void
+static void
 force_reopen (int dummy)
 {
   do_reopen = 1;
 }
 
-void
+static void
 force_refresh (int dummy)
 {
   redraw (1);
 }
 
-void
+static void
 blank_window (int dummy)
 {
   XClearArea (disp, root, win_x, win_y, width + MARGIN_OF_ERROR, height, False);
@@ -210,7 +212,7 @@ blank_window (int dummy)
 }
 
 /* X related functions */
-unsigned long
+static unsigned long
 GetColor (const char *ColorName)
 {
   XColor Color;
@@ -283,7 +285,7 @@ find_root_window (Display *display, int screen_number)
 }
 #endif /* USE_TOON_GET_ROOT_WINDOW */
 
-void
+static void
 InitWindow (void)
 {
   XGCValues gcv;
@@ -301,7 +303,28 @@ InitWindow (void)
   ScreenHeight = DisplayHeight (disp, screen);
   ScreenWidth = DisplayWidth (disp, screen);
 
-  find_root_window (disp, screen);
+  if (opt_windowed)
+    {
+      XRectangle rect = { };
+      XSetWindowAttributes attr;
+
+      attr.background_pixmap = ParentRelative;
+      attr.override_redirect = True;
+
+      root = XCreateWindow (
+        disp, DefaultRootWindow (disp), 0, 0, DisplayWidth (disp, screen), DisplayHeight (disp, screen),
+        0, CopyFromParent, InputOutput, CopyFromParent,
+        CWOverrideRedirect | CWBackPixmap, &attr);
+
+      XMapWindow (disp, root);
+      XLowerWindow (disp, root);
+
+      XserverRegion region = XFixesCreateRegion (disp, &rect, 1);
+      XFixesSetWindowShapeRegion (disp, root, ShapeInput, 0, 0, region);
+      XFixesDestroyRegion (disp, region);
+    }
+  else
+    find_root_window (disp, screen);
 
   gcm = GCBackground;
   gcv.graphics_exposures = True;
@@ -319,12 +342,13 @@ InitWindow (void)
       e->fontset = XCreateFontSet (disp, e->fontname,
                                    &missing_charset_list, &missing_charset_count,
                                    &def_string);
-
       if (missing_charset_count)
         {
+#if 0
           fprintf (stderr,
                    "Missing charsets in String to FontSet conversion (%s)\n",
                    missing_charset_list[0]);
+#endif
           XFreeStringList (missing_charset_list);
         }
 
@@ -378,14 +402,15 @@ InitWindow (void)
  *
  * the rest is handled by regular refresh ()'es
  */
-void
+static void
 redraw (int redraw_all)
 {
   XSetClipMask (disp, WinGC, None);
   refresh (0, 32768, 1, redraw_all);
 }
 
-void draw_text (Display *disp, Window root, GC WinGC, int x, int y, struct line_node *line, int foreground)
+static void
+draw_text (Display *disp, Window root, GC WinGC, int x, int y, struct line_node *line, int foreground)
 {
   if (line->wrapped_right && opt_justify && line->breaks)
     {
@@ -417,7 +442,7 @@ void draw_text (Display *disp, Window root, GC WinGC, int x, int y, struct line_
 }
 
 /* Just redraw everything without clearing (i.e. after an EXPOSE event) */
-void
+static void
 refresh (int miny, int maxy, int clear, int refresh_all)
 {
   int lin = 0;
@@ -595,7 +620,7 @@ refresh (int miny, int maxy, int clear, int refresh_all)
 }
 
 #if HAS_REGEX
-void
+void void
 transform_line (char *s)
 {
 #ifdef I_AM_Md
@@ -650,7 +675,7 @@ transform_line (char *s)
  * appends p2 to the end of p1, if p1 is not null
  * otherwise allocates a new string and copies p2 to it
  */
-char *
+static char *
 concat_line (char *p1, const char *p2)
 {
   int l1 = p1 ? strlen (p1) : 0;
@@ -673,7 +698,7 @@ concat_line (char *p1, const char *p2)
 /*
  * This routine can read a line of any length if it is called enough times.
  */
-int
+static int
 lineinput (struct logfile_entry *logfile)
 {
   char buff[1024], *p;
@@ -742,8 +767,8 @@ lineinput (struct logfile_entry *logfile)
  * returns file->fp
  * in case of error, file->fp is NULL
  */
-FILE *
-openlog (struct logfile_entry * file)
+static FILE *
+openlog (struct logfile_entry *file)
 {
   struct stat stats;
 
@@ -774,7 +799,7 @@ openlog (struct logfile_entry * file)
   return file->fp;
 }
 
-void
+static void
 reopen (void)
 {
   struct logfile_entry *e;
@@ -793,7 +818,7 @@ reopen (void)
   do_reopen = 0;
 }
 
-void
+static void
 check_open_files (void)
 {
   struct logfile_entry *e;
@@ -1273,7 +1298,6 @@ main_loop (void)
     }
 }
 
-
 int
 main (int argc, char *argv[])
 {
@@ -1326,6 +1350,8 @@ main (int argc, char *argv[])
               reload = atoi (argv[++i]);
               command = argv[++i];
             }
+          else if (!strcmp (arg, "-windowed"))
+            opt_windowed = 1;
           else if (!strcmp (arg, "-shade"))
             opt_shade = 1;
           else if (!strcmp (arg, "-outline"))
@@ -1539,7 +1565,7 @@ main (int argc, char *argv[])
   exit (1);                     /* to make gcc -Wall stop complaining */
 }
 
-void
+static void
 install_signal (int sig, void (*handler) (int))
 {
   struct sigaction action;
@@ -1552,7 +1578,7 @@ install_signal (int sig, void (*handler) (int))
     fprintf (stderr, "sigaction (%d): %s\n", sig, strerror (errno)), exit (1);
 }
 
-void *
+static void *
 xstrdup (const char *string)
 {
   void *p;
@@ -1566,7 +1592,7 @@ xstrdup (const char *string)
   return p;
 }
 
-void *
+static void *
 xmalloc (size_t size)
 {
   void *p;
@@ -1580,7 +1606,7 @@ xmalloc (size_t size)
   return p;
 }
 
-void *
+static void *
 xrealloc (void *ptr, size_t size)
 {
   void *p;
@@ -1594,7 +1620,7 @@ xrealloc (void *ptr, size_t size)
   return p;
 }
 
-void
+static void
 display_help (char *myname)
 {
   printf ("Usage: %s [options] file1[,color[,desc]]"
@@ -1603,6 +1629,7 @@ display_help (char *myname)
           " -color    color           use color $color as default\n"
           " -reload sec command       reload after $sec and run command\n"
           " -id id                    window id to use instead of the root window\n"
+          " -windowed                 create a window instead of writing to the root\n"
           " -font FONTSPEC            (-fn) font to use\n"
           " -f | -fork                fork into background\n"
           " -reverse                  print new lines at the top\n"
@@ -1626,14 +1653,14 @@ display_help (char *myname)
   exit (0);
 }
 
-void
+static void
 display_version (void)
 {
   printf ("root-tail version " VERSION "\n");
   exit (0);
 }
 
-int
+static int
 daemonize (void)
 {
   pid_t pid;
@@ -1654,3 +1681,4 @@ daemonize (void)
 
   return 0;
 }
+

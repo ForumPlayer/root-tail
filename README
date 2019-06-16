@@ -1,6 +1,6 @@
 INSTALL
 
-   xmkmf -a
+   xmkmf -a # or use the provided Makefile
    make
    make install
    make install.man

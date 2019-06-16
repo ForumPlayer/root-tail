@@ -28,6 +28,7 @@ root-tail \- print text directly to X11 root window
 .RB [ \-\-justify ]
 .RB [ \-\-noinitial ]
 .RB [ \-\-frame ]
+.RB [ \-\-windowed }
 .RB [ \-id
 .IR ID ]
 .RB [ \-i \|| \-\-interval
@@ -40,7 +41,7 @@ file1[,color[,desc]]
 Displays a given file anywhere on your X11 root window, i.e. it is kind of tail -f for multiple files
 using your desktop background as output window.
 .PP
-All non-option arguments on the comamnd line are files to be logged. A
+All non-option arguments on the command line are files to be logged. A
 null desc (example: "/var/log/messages,red,") will prevent the printing of
 a description and the []'s.
 .PP
@@ -117,6 +118,13 @@ Use slower but flicker-free update.
 .B \-\-noinitial
 Don't display the end of the file(s) initially.
 .TP
+.BI \-\-windowed
+Create a new window instead of reusing the root window. The newly created window
+covers the whole screen, puts itself behind all other windows and and does not accept
+events. Use this option if you use a compositing manager suihc as xcompmgr or compton, as
+the compositing extension has been very badly designed and cannot handle root windows
+correctly.
+.TP
 .BI "\-id" " ID"
 Use the given window ID for output instead of the root window.
 .TP
@@ -133,7 +141,7 @@ find the perfect geometry.
 .IP
 .SH EXAMPLE
 .PP
-root-tail -g 800x250+100+50 -font 10x20 /var/log/messages,green -font 12x24 /var/log/secure,red,'ALERT'
+root-tail --windowed -g 800x250+100+50 -font 10x20 /var/log/messages,green -font 12x24 /var/log/secure,red,'ALERT'
 .SH BUGS
 .PP
 Some desktop environments open a virtual root window and make it difficult to share it. If
