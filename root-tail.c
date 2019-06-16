@@ -153,24 +153,12 @@ static regex_t *transformre;
 
 
 /* prototypes */
-static void list_files (int);
-static void force_reopen (int);
-static void force_refresh (int);
-static void blank_window (int);
 #ifdef USE_TOON_GET_ROOT_WINDOW
 static Window ToonGetRootWindow(Display *, int, Window *);
 #endif /* USE_TOON_GET_ROOT_WINDOW */
 
-static void InitWindow (void);
-static unsigned long GetColor (const char *);
 static void redraw (int);
 static void refresh (int, int, int, int);
-
-static int lineinput (struct logfile_entry *);
-static void reopen (void);
-static void check_open_files (void);
-static FILE *openlog (struct logfile_entry *);
-static void main_loop (void);
 
 static void display_version (void);
 static void display_help (char *);
