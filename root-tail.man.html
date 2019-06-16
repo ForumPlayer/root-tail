@@ -1,276 +1,258 @@
-<!-- Creator     : groff version 1.22.4 -->
-<!-- CreationDate: Sun Jun 16 01:26:08 2019 -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta name="generator" content="groff -Thtml, see www.gnu.org">
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<meta name="Content-Style" content="text/css">
-<style type="text/css">
-       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
-       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
-       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
-       h1      { text-align: center }
-</style>
-<title>ROOTTAIL</title>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of ROOTTAIL</TITLE>
+</HEAD><BODY>
+<H1>ROOTTAIL</H1>
+Section: User Commands  (1)<BR>Updated: 2004-03-27<BR><A HREF="#index">Index</A>
+<A HREF="/cgi-bin/man/man2html">Return to Main Contents</A><HR>
 
-</head>
-<body>
 
-<h1 align="center">ROOTTAIL</h1>
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
 
-<a href="#NAME">NAME</a><br>
-<a href="#SYNOPSIS">SYNOPSIS</a><br>
-<a href="#DESCRIPTION">DESCRIPTION</a><br>
-<a href="#EXAMPLE">EXAMPLE</a><br>
-<a href="#BUGS">BUGS</a><br>
+root-tail - print text directly to X11 root window
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
 
-<hr>
-
+<B>root-tail</B>
 
-<h2>NAME
-<a name="NAME"></a>
-</h2>
+[<B>-g</B>|<B>--geometry</B>
 
+<I>GEOMETRY</I>]
 
-<p style="margin-left:11%; margin-top: 1em">root-tail -
-print text directly to X11 root window</p>
+[<B>-fn</B>|<B>--font</B>
 
-<h2>SYNOPSIS
-<a name="SYNOPSIS"></a>
-</h2>
+<I>FONTSPEC</I>]
 
+[<B>--color</B>
 
+<I>color</I>]
 
-<p style="margin-left:11%; margin-top: 1em"><b>root-tail</b>
-[<b>-g</b>|<b>--geometry</b> <i>GEOMETRY</i>]
-[<b>-fn</b>|<b>--font</b> <i>FONTSPEC</i>] [<b>--color</b>
-<i>color</i>] [<b>--reload</b> <i>SEC COMMAND</i>]
-[<b>--shade</b>] [<b>--outline</b>] [<b>--minspace</b>]
-[<b>--noflicker</b>] [<b>-f</b>|<b>--fork</b>]
-[<b>--reverse</b>] [<b>--whole</b>] [<b>--partial</b>]
-[<b>--update</b>] [<b>--cont</b> <i>STRING</i>]
-[<b>--wordwrap</b>] [<b>--justify</b>] [<b>--noinitial</b>]
-[<b>--frame</b>] [<b>--windowed</b>} [<b>-id</b> <i>ID</i>]
-[<b>-i</b>|<b>--interval</b> <i>SECONDS</i>] [<b>-V</b>]
-file1[,color[,desc]] [file2[,color[,desc]]]</p>
+[<B>--reload</B>
 
-<h2>DESCRIPTION
-<a name="DESCRIPTION"></a>
-</h2>
+<I>SEC</I>
 
+<I>COMMAND</I>]
 
-<p style="margin-left:11%; margin-top: 1em">Displays a
-given file anywhere on your X11 root window, i.e. it is kind
-of tail -f for multiple files using your desktop background
-as output window.</p>
+[<B>--shade</B>]
 
-<p style="margin-left:11%; margin-top: 1em">All non-option
-arguments on the command line are files to be logged. A null
-desc (example: &quot;/var/log/messages,red,&quot;) will
-prevent the printing of a description and the
-[]&rsquo;s.</p>
+[<B>--outline</B>]
 
-<p style="margin-left:11%; margin-top: 1em"><b>General
-Options <br>
---color</b> <i>COLOR</i></p>
+[<B>--minspace</B>]
 
-<p style="margin-left:22%;">Use COLOR as default.</p>
+[<B>--noflicker</B>]
 
-<p style="margin-left:11%;"><b>--font | -fn</b>
-<i>FONTSPEC</i></p>
+[<B>-f</B>|<B>--fork</B>]
 
-<p style="margin-left:22%;">Use font FONTSPEC. This can be
-either a fixed width font like <b>-fn</b> <i>fixed</i> or
-any font using <b>-fn</b>
-&rsquo;<i>-*-*-*-*-*-*-*-*-*-*-*-*-*-*</i>&rsquo; with the
-appropriate fields filled out (see xfontsel). Specifying a
-different FONTSPEC before each filename will cause each file
-to be displayed in a different font.</p>
+[<B>--reverse</B>]
 
-<p style="margin-left:11%;"><b>-f | --fork</b></p>
+[<B>--whole</B>]
 
-<p style="margin-left:22%;">Forks to the background.</p>
+[<B>--partial</B>]
 
-<p style="margin-left:11%;"><b>--reverse</b></p>
+[<B>--update</B>]
 
-<p style="margin-left:22%;">Display the files in reverse
-order, with the newest lines at the top.</p>
+[<B>--cont</B>
 
-<p style="margin-left:11%;"><b>--whole</b></p>
+<I>STRING</I>]
 
-<p style="margin-left:22%;">Only display whole lines. If
-the last line of a file doesn&rsquo;t yet end with a newline
-character then wait until it does before displaying it. This
-is the default if more than one file is being displayed.</p>
+[<B>--wordwrap</B>]
 
-<p style="margin-left:11%;"><b>--partial</b></p>
+[<B>--justify</B>]
 
-<p style="margin-left:22%;">This is the opposite of the
-<b>--whole</b> option (see above). It displays lines even if
-they don&rsquo;t yet have a newline at the end. This is the
-default if only one file is being displayed.</p>
+[<B>--noinitial</B>]
 
-<p style="margin-left:11%;"><b>--update</b></p>
+[<B>--frame</B>]
 
-<p style="margin-left:22%;">Update partial lines &rsquo;in
-place&rsquo; if they are still on the screen when they are
-updated in their files. Using <b>--update</b> automatically
-turns on <b>--partial</b>.</p>
+[<B>--windowed</B>}
 
-<p style="margin-left:11%;"><b>--cont</b> <i>STRING</i></p>
+[<B>-id</B>
 
-<p style="margin-left:22%;">When partial lines are broken
-into two lines in the display, prefix the 2nd line with
-STRING. Defaults to &quot;<i>||</i> &quot;. Specify the
-&quot;<b>--whole</b>&quot; argument to ensure partial lines
-are never displayed, or specify &quot;<b>--update</b>&quot;
-to attempt to &quot;repair&quot; broken lines in-place.</p>
+<I>ID</I>]
 
-<p style="margin-left:11%;"><b>--cont-color</b>
-<i>COLOR</i></p>
+[<B>-i</B>|<B>--interval</B>
 
-<p style="margin-left:22%;">Use COLOR when displaying the
-continuation string (as optionally specified with the
-<b>--cont</b> option above).</p>
+<I>SECONDS</I>]
 
-<p style="margin-left:11%;"><b>--wordwrap</b></p>
+[<B>-V</B>]
 
-<p style="margin-left:22%;">The default behaviour is to fit
-as much as possible onto each line of output, even if this
-means splitting a word between one line and the next. The
-<b>--wordwrap</b> argument splits lines at spaces if
-possible.</p>
+file1[,color[,desc]]
+[file2[,color[,desc]]]
 
-<p style="margin-left:11%;"><b>--justify</b></p>
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
 
-<p style="margin-left:22%;">After wrapping long lines,
-attempt to justify the text to produce a smooth right-hand
-margin. Implies <b>--wordwrap</b>.</p>
+Displays a given file anywhere on your X11 root window, i.e. it is kind of tail -f for multiple files
+using your desktop background as output window.
+<P>
 
-<p style="margin-left:11%;"><b>--reload</b> <i>SEC
-COMMAND</i></p>
+All non-option arguments on the command line are files to be logged. A
+null desc (example: &quot;/var/log/messages,red,&quot;) will prevent the printing of
+a description and the []'s.
+<P>
 
-<p style="margin-left:22%;">Re-display the file(s) and run
-COMMAND every SEC seconds. The default is to never
-re-display the file(s).</p>
+<A NAME="lbAE">&nbsp;</A>
+<H3>General Options</H3>
 
-<p style="margin-left:11%;"><b>--shade</b></p>
+<DL COMPACT>
+<DT><B>--color</B><I> COLOR</I>
 
-<p style="margin-left:22%;">Add black shading to the
-font.</p>
-
-<p style="margin-left:11%;"><b>--outline</b></p>
-
-<p style="margin-left:22%;">Add a black outline to the font
-(making redraws quite a bit slower).</p>
-
-<p style="margin-left:11%;"><b>--minspace</b></p>
-
-<p style="margin-left:22%;">Use minimum linespace even when
-using shading or outlining. This might result in leftover
-pixels (dependign on font and logfile content).</p>
-
-<p style="margin-left:11%;"><b>--noflicker</b></p>
-
-<p style="margin-left:22%;">Use slower but flicker-free
-update.</p>
-
-<p style="margin-left:11%;"><b>--noinitial</b></p>
-
-<p style="margin-left:22%;">Don&rsquo;t display the end of
-the file(s) initially.</p>
-
-<p style="margin-left:11%;"><b>--windowed</b></p>
-
-<p style="margin-left:22%;">Create a new window instead of
-reusing the root window. The newly created window covers the
-whole screen, puts itself behind all other windows and and
-does not accept events. Use this option if you use a
-compositing manager suihc as xcompmgr or compton, as the
-compositing extension has been very badly designed and
-cannot handle root windows correctly.</p>
-
-<table width="100%" border="0" rules="none" frame="void"
-       cellspacing="0" cellpadding="0">
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>-id</b> <i>ID</i></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Use the given window ID for output instead of the root
-window.</p> </td></tr>
-</table>
-
-<p style="margin-left:11%;"><b>-i | --interval</b>
-<i>SECONDS</i></p>
-
-<p style="margin-left:22%;">Use the specified sleeping
-interval between checks instead of the default 2.4 seconds.
-Fractional values are OK.</p>
-
-<table width="100%" border="0" rules="none" frame="void"
-       cellspacing="0" cellpadding="0">
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="3%">
-
-
-<p><b>-V</b></p></td>
-<td width="8%"></td>
-<td width="40%">
-
-
-<p>Print version information.</p></td>
-<td width="38%">
-</td></tr>
-</table>
-
-<p style="margin-left:11%;"><b>--frame</b></p>
-
-<p style="margin-left:22%;">Draw a frame around the
-selected area. This is useful when trying to find the
-perfect geometry.</p>
-
-<h2>EXAMPLE
-<a name="EXAMPLE"></a>
-</h2>
-
-
-<p style="margin-left:11%; margin-top: 1em">root-tail
---windowed -g 800x250+100+50 -font 10x20
-/var/log/messages,green -font 12x24
-/var/log/secure,red,&rsquo;ALERT&rsquo;</p>
-
-<h2>BUGS
-<a name="BUGS"></a>
-</h2>
-
-
-<p style="margin-left:11%; margin-top: 1em">Some desktop
-environments open a virtual root window and make it
-difficult to share it. If you cannot see anything after
-starting root-tail, try to find a setting &quot;allow
-programs on desktop&quot; or similar, or manually specify a
-window id.</p>
-
-<p style="margin-left:11%; margin-top: 1em">Should you
-happen to find any bugs please fix them and send me a
-diff.</p>
-
-<p style="margin-left:11%; margin-top: 1em">NOTE: This
-program was modified by Marc Lehmann &lt;pcg@goof.com&gt;,
-who couldn&rsquo;t reach the original author. Please direct
-bug-reports etc. to pcg@goof.com.</p>
-
-
-<p style="margin-left:11%; margin-top: 1em">http://root-tail.plan9.de/</p>
-<hr>
-</body>
-</html>
+<DD>
+Use COLOR as default.
+<DT><B>--font | -fn</B><I> FONTSPEC</I>
+
+<DD>
+Use font FONTSPEC. This can be either a fixed width font like <B>-fn</B><I>
+fixed</I> or any font using <B>-fn </B>'<I>-*-*-*-*-*-*-*-*-*-*-*-*-*-*</I>' with
+the appropriate fields filled out (see xfontsel).  Specifying a
+different FONTSPEC before each filename will cause each file to be
+displayed in a different font.
+<DT><B>-f | --fork</B>
+
+<DD>
+Forks to the background.
+<DT><B>--reverse</B>
+
+<DD>
+Display the files in reverse order, with the newest lines at the top.
+<DT><B>--whole</B>
+
+<DD>
+Only display whole lines. If the last line of a file doesn't yet end
+with a newline character then wait until it does before displaying
+it. This is the default if more than one file is being displayed.
+<DT><B>--partial</B>
+
+<DD>
+This is the opposite of the <B>--whole</B> option (see above). It displays
+lines even if they don't yet have a newline at the end. This is the
+default if only one file is being displayed.
+<DT><B>--update</B>
+
+<DD>
+Update partial lines 'in place' if they are still on the screen when
+they are updated in their files. Using <B>--update</B> automatically turns on
+<B>--partial</B>.
+<DT><B>--cont</B><I> STRING</I>
+
+<DD>
+When partial lines are broken into two lines in the display, prefix
+the 2nd line with STRING. Defaults to &quot;<I>|| </I>&quot;. Specify the &quot;<B>--whole</B>&quot;
+argument to ensure partial lines are never displayed, or specify &quot;<B>--update</B>&quot;
+to attempt to &quot;repair&quot; broken lines in-place.
+<DT><B>--cont-color</B><I> COLOR</I>
+
+<DD>
+Use COLOR when displaying the continuation string (as optionally
+specified with the <B>--cont</B> option above).
+<DT><B>--wordwrap</B>
+
+<DD>
+The default behaviour is to fit as much as possible onto each line of
+output, even if this means splitting a word between one line and the
+next. The <B>--wordwrap</B> argument splits lines at spaces if
+possible.
+<DT><B>--justify</B>
+
+<DD>
+After wrapping long lines, attempt to justify the text to produce a
+smooth right-hand margin.  Implies <B>--wordwrap</B>.
+<DT><B>--reload</B><I> SEC COMMAND</I>
+
+<DD>
+Re-display the file(s) and run COMMAND every SEC seconds. The
+default is to never re-display the file(s).
+<DT><B>--shade</B>
+
+<DD>
+Add black shading to the font.
+<DT><B>--outline</B>
+
+<DD>
+Add a black outline to the font (making redraws quite a bit slower).
+<DT><B>--minspace</B>
+
+<DD>
+Use minimum linespace even when using shading or outlining. This might result in
+leftover pixels (dependign on font and logfile content).
+<DT><B>--noflicker</B>
+
+<DD>
+Use slower but flicker-free update.
+<DT><B>--noinitial</B>
+
+<DD>
+Don't display the end of the file(s) initially.
+<DT><B>--windowed</B>
+
+<DD>
+Create a new window instead of reusing the root window. The newly created window
+covers the whole screen, puts itself behind all other windows and and does not accept
+events. Use this option if you use a compositing manager suihc as xcompmgr or compton, as
+the compositing extension has been very badly designed and cannot handle root windows
+correctly.
+<DT><B>-id</B><I> ID</I>
+
+<DD>
+Use the given window ID for output instead of the root window.
+<DT><B>-i | --interval</B><I> SECONDS</I>
+
+<DD>
+Use the specified sleeping interval between checks instead of the
+default 2.4 seconds. Fractional values are OK.
+<DT><B>-V</B>
+
+<DD>
+Print version information.
+<DT><B>--frame</B>
+
+<DD>
+Draw a frame around the selected area.  This is useful when trying to
+find the perfect geometry.
+<DT><DD>
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>EXAMPLE</H2>
+
+<P>
+
+root-tail --windowed -g 800x250+100+50 -font 10x20 /var/log/messages,green -font 12x24 /var/log/secure,red,'ALERT'
+<A NAME="lbAG">&nbsp;</A>
+<H2>BUGS</H2>
+
+<P>
+
+Some desktop environments open a virtual root window and make it difficult to share it. If
+you cannot see anything after starting root-tail, try to find a setting &quot;allow programs
+on desktop&quot; or similar, or manually specify a window id.
+<P>
+
+Should you happen to find any bugs please fix them and send me a diff.
+<P>
+
+NOTE: This program was modified by Marc Lehmann &lt;<A HREF="mailto:pcg@goof.com">pcg@goof.com</A>&gt;, who
+couldn't reach the original author. Please direct bug-reports etc. to
+<A HREF="mailto:pcg@goof.com">pcg@goof.com</A>.
+<P>
+
+<A HREF="http://root-tail.plan9.de/">http://root-tail.plan9.de/</A>
+<P>
+
+<HR>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="#lbAE">General Options</A><DD>
+</DL>
+<DT><A HREF="#lbAF">EXAMPLE</A><DD>
+<DT><A HREF="#lbAG">BUGS</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 01:24:48 GMT, June 16, 2019
+</BODY>
+</HTML>
