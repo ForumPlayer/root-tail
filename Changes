@@ -1,3 +1,7 @@
+	- moved libraries to the end when linking, which is actually correct,
+          as gcc-9 finally punishes this bug by default as it uses
+          -Wl,--as-needed by default (reorted by Axel Beckert).
+
 1.3  Sun Jun 16 03:16:08 CEST 2019
 	- implemented -windowed option that creates its own desktop window.
 	- cleaned up source code somewhat.

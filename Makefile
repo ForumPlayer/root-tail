@@ -14,7 +14,7 @@ SOURCES = root-tail.c
 all: root-tail man
 
 root-tail: $(SOURCES) config.h
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(SOURCES)
+	$(CC) $(CFLAGS) -o $@ $(SOURCES) $(LDFLAGS)
 
 man: root-tail.1.gz
 
